@@ -1,0 +1,12 @@
+# Font style metadata
+name = "prata"
+
+# Optional Google font URL
+google_fonts = "Prata|Muli|PT+Mono"
+
+
+# Font families
+heading_font = "Prata"
+body_font = "Muli"
+nav_font = "Prata"
+mono_font = "PT Mono"

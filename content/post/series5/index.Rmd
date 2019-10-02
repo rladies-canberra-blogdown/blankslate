@@ -1,0 +1,71 @@
+---
+authors:
+- admin
+categories:
+- Demo
+date: "2014-10-08T00:00:00Z"
+draft: false
+featured: false
+image:
+  caption: 'Image credit: [**Unsplash**](https://unsplash.com/photos/CpkOjOcXdUY)'
+  focal_point: ""
+  placement: 1
+  preview_only: false
+lastmod: "2014-10-08T00:00:00Z"
+projects: []
+subtitle: 'Create a beautifully simple website in under 10 minutes :rocket:'
+summary: Create a beautifully simple website in under 10 minutes.
+tags:
+- Academic
+title: 'All about series 5 here!'
+params:
+  series: 5
+  palette: "Darjeeling1"
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, 
+                      warning = FALSE,
+                      message = FALSE)
+library(tidyverse)
+library(here)
+library(glue)
+library(wesanderson)
+theme_set(theme_minimal())
+```
+
+```{r import-data, include=FALSE}
+ratings <- readr::read_csv(glue::glue("ratings-{params$series}.csv")) %>% 
+  mutate(episode = as.factor(episode))
+```
+
+
+# Overview
+
+Series `r params$series` premiered on `r min(ratings$uk_airdate)`, and had `r n_distinct(ratings$episode)` episodes.
+
+# Ratings
+
+```{r ratings-by-episode}
+viewers <- ratings %>% 
+  select(series:viewers_28day) %>% 
+  pivot_longer(starts_with("viewers"), 
+    names_to = "days", 
+    names_prefix = "viewers_", 
+    values_to = "viewers"
+  ) 
+ggplot(viewers, 
+       aes(episode, viewers, 
+           colour = days, group = days)
+       ) + 
+  geom_point() + 
+  geom_line() + 
+  labs(
+    x = "Episode", 
+    y = "Viewers (millions)"
+  ) +
+  expand_limits(y = 0) +
+  scale_colour_manual(values = wes_palette(params$palette))
+```
+
